@@ -27,6 +27,17 @@
     }
   ],
 
+  // Both of these default to TRUE when absent, and wrangler re-applies that
+  // default on every deploy — so turning them off in the dashboard alone gets
+  // silently undone by the next push. They are stated here so the config and
+  // the dashboard agree and stay agreeing.
+  //
+  // The site answers on writeups.zephryx.in and nowhere else: a publication
+  // that exists to be indexed should not also be reachable at a workers.dev
+  // hostname serving identical content under a different origin.
+  "workers_dev": false,
+  "preview_urls": false,
+
   // No "binding" here on purpose: an ASSETS binding is what a Worker script
   // uses to reach the static build (`env.ASSETS.fetch`), so declaring one
   // without a script is rejected outright — "Cannot use assets with a binding
