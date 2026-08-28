@@ -12,6 +12,21 @@
   // moved to a sibling domain), add "main": "worker/index.ts" plus
   // "run_worker_first": true and follow the REDIRECTS pattern in
   // zephryx.in's worker/index.ts rather than inventing a second mechanism.
+
+  // The public address. `custom_domain: true` makes Cloudflare create the DNS
+  // record and issue the certificate on deploy, so the hostname is declared
+  // here in version control rather than clicked into the dashboard — the
+  // deploy is then the single source of truth for where this site answers.
+  //
+  // This requires that writeups.zephryx.in has no pre-existing CNAME record:
+  // Cloudflare refuses to take over a hostname that already resolves.
+  "routes": [
+    {
+      "pattern": "writeups.zephryx.in",
+      "custom_domain": true
+    }
+  ],
+
   // No "binding" here on purpose: an ASSETS binding is what a Worker script
   // uses to reach the static build (`env.ASSETS.fetch`), so declaring one
   // without a script is rejected outright — "Cannot use assets with a binding
