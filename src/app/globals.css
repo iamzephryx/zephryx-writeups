@@ -1,0 +1,646 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   ZEPHRYX — design tokens
+   Dark base, oxidised-red accent, terminal-grade typography.
+   ============================================================ */
+
+@theme {
+  --color-void: #06070a;
+  --color-abyss: #0a0c11;
+  --color-surface: #0e1117;
+  --color-elevated: #131822;
+  --color-line: #1c2230;
+  --color-line-hot: #3a1520;
+
+  --color-red-blood: #ff2d4b;
+  --color-red-core: #e6153a;
+  --color-red-deep: #8f0d24;
+  --color-red-ash: #4a0a17;
+
+  --color-ink: #e8ebef;
+  --color-ink-dim: #98a1af;
+  --color-ink-faint: #5c6675;
+
+  --color-signal: #29d391;
+  --color-warn: #ffb020;
+
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --animate-scan: scan 7s linear infinite;
+  --animate-flicker: flicker 4.5s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-blink: blink 1.05s step-end infinite;
+  --animate-drift: drift 24s ease-in-out infinite alternate;
+}
+
+/* ============================================================
+   Theming — dark is the default (no attribute needed). Setting
+   data-theme="light" on <html> (via ThemeToggle) swaps the page-level
+   chrome tokens only. Anything inside .panel (Terminal, cards, the
+   contact form, error-page log blocks) re-pins those same variables
+   back to their dark values immediately below, so panels always look
+   like a terminal window regardless of the surrounding page theme.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+  --backdrop-vignette-mid: rgba(6, 7, 10, 0.55);
+  --backdrop-vignette-edge: rgba(6, 7, 10, 0.94);
+  --backdrop-grid-opacity: 0.7;
+  --backdrop-bloom-opacity: 0.45;
+  --backdrop-bloom-2-opacity: 0.3;
+  --backdrop-grain-opacity: 0.16;
+  --backdrop-grain-blend: soft-light;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-void: #f5f6f8;
+  --color-abyss: #eef0f3;
+  --color-surface: #e6e9ed;
+  --color-elevated: #dde1e7;
+  --color-line: #d7dae1;
+  --color-line-hot: #f0d3d8;
+
+  --color-ink: #14161c;
+  --color-ink-dim: #4b5563;
+  /* Darker than the dark-theme equivalent so small muted labels still clear
+     WCAG AA (4.5:1) against the light page background. */
+  --color-ink-faint: #656d7a;
+
+  --backdrop-vignette-mid: rgba(120, 110, 108, 0.08);
+  --backdrop-vignette-edge: rgba(90, 82, 80, 0.18);
+
+  /* Blooms and grain are far more visible over light; dial them back so the
+     backdrop stays atmosphere rather than becoming pink smudges. */
+  --backdrop-grid-opacity: 0.5;
+  --backdrop-bloom-opacity: 0.16;
+  --backdrop-bloom-2-opacity: 0.1;
+  --backdrop-grain-opacity: 0.07;
+  --backdrop-grain-blend: multiply;
+}
+
+:root[data-theme='light'] .panel {
+  --color-void: #06070a;
+  --color-abyss: #0a0c11;
+  --color-surface: #0e1117;
+  --color-elevated: #131822;
+  --color-line: #1c2230;
+  --color-line-hot: #3a1520;
+  --color-ink: #e8ebef;
+  --color-ink-dim: #98a1af;
+  --color-ink-faint: #5c6675;
+  color-scheme: dark;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.72; }
+  94% { opacity: 1; }
+  96% { opacity: 0.85; }
+  97% { opacity: 1; }
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(255, 45, 75, 0.45); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 45, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 45, 75, 0); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(2%, -3%, 0) scale(1.08); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes glitch-x {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(12% 0 62% 0); transform: translate(-2px, 0); }
+  40% { clip-path: inset(48% 0 28% 0); transform: translate(2px, 0); }
+  60% { clip-path: inset(72% 0 8% 0); transform: translate(-1px, 0); }
+  80% { clip-path: inset(28% 0 48% 0); transform: translate(1px, 0); }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+    min-width: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgba(255, 45, 75, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-red-blood);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* The skip-link target takes focus programmatically so the next Tab
+     continues into the content. It is not a control and is not reachable by
+     Tab, so it skips the ring rather than outlining the whole page. */
+  main[tabindex='-1']:is(:focus, :focus-visible) {
+    outline: none;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--color-void); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-red-deep), var(--color-red-ash));
+    border-radius: 0;
+    border: 2px solid var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-red-core); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 45, 75, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 45, 75, 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center center;
+}
+
+@utility grid-bg-fine {
+  background-image:
+    linear-gradient(rgba(160, 175, 200, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 175, 200, 0.045) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+@utility noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+@utility text-glow {
+  text-shadow: 0 0 18px rgba(255, 45, 75, 0.55), 0 0 42px rgba(255, 45, 75, 0.22);
+}
+
+@utility box-glow {
+  box-shadow:
+    0 0 0 1px rgba(255, 45, 75, 0.18),
+    0 0 28px -6px rgba(255, 45, 75, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.03);
+}
+
+@utility hairline {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.035);
+}
+
+/* Cards with a hovering red bloom that follows nothing — pure CSS, no JS. */
+@utility panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(19, 24, 34, 0.9) 0%, rgba(10, 12, 17, 0.9) 100%);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(6px);
+  transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+@utility clip-corner {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+@utility clip-tab {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+/* Reveal-on-scroll: element starts hidden, .is-visible is added by IO hook. */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+@layer utilities {
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.022) 0px,
+      rgba(255, 255, 255, 0.022) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+  }
+
+  .glitch {
+    position: relative;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .glitch::before {
+    color: var(--color-red-blood);
+    animation: glitch-x 3.6s infinite linear alternate-reverse;
+    opacity: 0.75;
+  }
+  .glitch::after {
+    color: #16d3f0;
+    animation: glitch-x 2.4s infinite linear alternate-reverse;
+    opacity: 0.35;
+  }
+
+  .anim-rise {
+    animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* ----------------------------------------------------------
+     Light-mode effect corrections.
+
+     The glow/scanline/glitch effects were tuned against a black
+     backdrop: a red halo and a cyan ghost read as depth on #06070a
+     but as muddy fringing on #f5f6f8. Below they're re-tuned for
+     light *page chrome* only — anything inside .panel keeps the
+     original dark-background treatment, since panels stay dark.
+     ---------------------------------------------------------- */
+
+  :root[data-theme='light'] .text-glow:not(.panel .text-glow) {
+    text-shadow: 0 0 22px rgba(230, 21, 58, 0.14);
+  }
+
+  :root[data-theme='light'] .glitch:not(.panel .glitch)::before {
+    opacity: 0.42;
+  }
+
+  :root[data-theme='light'] .glitch:not(.panel .glitch)::after {
+    color: #0b8ea3;
+    opacity: 0.16;
+  }
+
+  /* White scanline streaks are invisible on light; darken them instead. */
+  :root[data-theme='light'] .scanlines:not(.panel)::after {
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(20, 22, 28, 0.03) 0px,
+      rgba(20, 22, 28, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+
+  :root[data-theme='light'] .box-glow:not(.panel .box-glow) {
+    box-shadow:
+      0 0 0 1px rgba(230, 21, 58, 0.16),
+      0 10px 30px -12px rgba(20, 22, 28, 0.28);
+  }
+}
+
+/* ============================================================
+   Markdown (writeups)
+   ============================================================ */
+
+.prose-terminal {
+  color: var(--color-ink-dim);
+  font-size: 0.975rem;
+  line-height: 1.78;
+}
+.prose-terminal > * + * { margin-top: 1.15rem; }
+.prose-terminal h2 {
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 2.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.prose-terminal h2::before {
+  content: '## ';
+  color: var(--color-red-blood);
+}
+.prose-terminal h3 {
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-top: 2rem;
+}
+.prose-terminal h3::before {
+  content: '### ';
+  color: var(--color-red-deep);
+}
+/* Clear the fixed nav when a heading is jumped to from the in-page nav or a
+   shared #hash, otherwise the header lands underneath it. */
+.prose-terminal :is(h2, h3)[id] {
+  scroll-margin-top: 6.5rem;
+}
+/* Permalink affordance appended to every anchored heading. */
+.prose-terminal .heading-anchor {
+  margin-left: 0.5rem;
+  color: var(--color-ink-faint);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.prose-terminal :is(h2, h3):hover .heading-anchor,
+.prose-terminal .heading-anchor:focus-visible {
+  opacity: 1;
+}
+.prose-terminal .heading-anchor:hover { color: var(--color-red-blood); }
+.prose-terminal a {
+  color: var(--color-red-blood);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 45, 75, 0.4);
+}
+.prose-terminal a:hover { text-decoration-color: var(--color-red-blood); }
+.prose-terminal strong { color: var(--color-ink); font-weight: 600; }
+.prose-terminal ul, .prose-terminal ol { padding-left: 1.35rem; }
+.prose-terminal ul { list-style: none; }
+.prose-terminal ul > li { position: relative; }
+.prose-terminal ul > li::before {
+  content: '▸';
+  position: absolute;
+  left: -1.15rem;
+  color: var(--color-red-deep);
+}
+.prose-terminal ol { list-style: decimal; }
+.prose-terminal ol > li::marker { color: var(--color-red-deep); font-family: var(--font-mono); }
+.prose-terminal li + li { margin-top: 0.4rem; }
+.prose-terminal code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-red-blood);
+  background: rgba(255, 45, 75, 0.08);
+  border: 1px solid rgba(255, 45, 75, 0.16);
+  padding: 0.12em 0.4em;
+  border-radius: 3px;
+}
+.prose-terminal pre {
+  font-family: var(--font-mono);
+  background: var(--color-abyss);
+  border: 1px solid var(--color-line);
+  border-left: 2px solid var(--color-red-deep);
+  padding: 1.15rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.845rem;
+  line-height: 1.7;
+}
+.prose-terminal pre code {
+  color: var(--color-ink-dim);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ------------------------------------------------------------
+   Fenced blocks with a copy/download bar (detection rules).
+
+   The bar takes over the block's frame so the <pre> underneath keeps only its
+   scrolling. Actions render server-side but stay hidden until the client
+   component adds --interactive, so a reader without JS never meets a dead
+   button.
+   ------------------------------------------------------------ */
+.prose-terminal .code-block {
+  margin: 1.75rem 0;
+  border: 1px solid var(--color-line);
+  border-left: 2px solid var(--color-red-deep);
+  background: var(--color-abyss);
+}
+.prose-terminal .code-block > pre {
+  margin: 0;
+  border: 0;
+  background: none;
+}
+.prose-terminal .code-block__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin: 0;
+  padding: 0.45rem 0.7rem 0.45rem 1.25rem;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-elevated);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+/* Not a photo caption — drop the '// ' prefix the prose figcaption adds. */
+.prose-terminal .code-block__bar::before { content: none; }
+.prose-terminal .code-block__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  overflow: hidden;
+}
+.prose-terminal .code-block__lang { color: var(--color-red-blood); }
+.prose-terminal .code-block__file {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.prose-terminal .code-block__actions {
+  display: none;
+  margin-left: auto;
+  gap: 0.4rem;
+}
+.prose-terminal--interactive .code-block__actions { display: flex; }
+.prose-terminal .code-block__action {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--color-ink-dim);
+  background: none;
+  border: 1px solid var(--color-line);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.prose-terminal .code-block__action:hover {
+  color: var(--color-red-blood);
+  border-color: var(--color-red-deep);
+  background: rgba(255, 45, 75, 0.07);
+}
+.prose-terminal .code-block__action[data-state='done'] {
+  color: var(--color-signal);
+  border-color: rgba(41, 211, 145, 0.5);
+  background: rgba(41, 211, 145, 0.07);
+}
+.prose-terminal .code-block__action[data-state='error'] {
+  color: var(--color-warn);
+  border-color: rgba(255, 176, 32, 0.5);
+  background: rgba(255, 176, 32, 0.07);
+}
+/* Result announcements for screen readers only. */
+.prose-terminal .code-block__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.prose-terminal blockquote {
+  border-left: 2px solid var(--color-red-blood);
+  background: rgba(255, 45, 75, 0.045);
+  padding: 0.85rem 1.15rem;
+  color: var(--color-ink-dim);
+  font-style: italic;
+}
+.prose-terminal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+}
+.prose-terminal th, .prose-terminal td {
+  border: 1px solid var(--color-line);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+}
+.prose-terminal th {
+  background: var(--color-elevated);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.prose-terminal hr { border-color: var(--color-line); margin: 2.5rem 0; }
+.prose-terminal figure {
+  margin: 1.75rem 0;
+}
+.prose-terminal figure img {
+  display: block;
+  max-width: 100%;
+  /* No `width: auto` — the width/height attributes set by the renderer give the
+     browser an aspect ratio to reserve space with while the image is loading. */
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--color-line);
+  background: var(--color-abyss);
+}
+.prose-terminal figcaption {
+  margin-top: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  text-align: center;
+}
+.prose-terminal figcaption::before {
+  content: '// ';
+  color: var(--color-red-blood);
+}
+
+/* Light-mode prose accents: the bright #ff2d4b reads at only ~3.4:1 on a light
+   background, so swap in a deeper red for the small text that uses it (inline
+   code, links, list markers) to clear WCAG AA. */
+:root[data-theme='light'] .prose-terminal code {
+  color: #c01030;
+  background: rgba(192, 16, 48, 0.06);
+  border-color: rgba(192, 16, 48, 0.18);
+}
+:root[data-theme='light'] .prose-terminal pre code {
+  color: var(--color-ink-dim);
+  background: none;
+  border: none;
+}
+:root[data-theme='light'] .prose-terminal .code-block__lang {
+  color: #c01030;
+}
+:root[data-theme='light'] .prose-terminal .code-block__action:hover {
+  color: #c01030;
+  border-color: rgba(192, 16, 48, 0.5);
+  background: rgba(192, 16, 48, 0.06);
+}
+/* The dark-theme signal green sits at ~2:1 on a light background. */
+:root[data-theme='light'] .prose-terminal .code-block__action[data-state='done'] {
+  color: #0b7048;
+  border-color: rgba(11, 112, 72, 0.5);
+  background: rgba(11, 112, 72, 0.07);
+}
+:root[data-theme='light'] .prose-terminal .code-block__action[data-state='error'] {
+  color: #8a5300;
+  border-color: rgba(138, 83, 0, 0.5);
+  background: rgba(138, 83, 0, 0.07);
+}
+:root[data-theme='light'] .prose-terminal a {
+  color: #c01030;
+  text-decoration-color: rgba(192, 16, 48, 0.45);
+}
+:root[data-theme='light'] .prose-terminal a:hover {
+  text-decoration-color: #c01030;
+}
+:root[data-theme='light'] .prose-terminal ul > li::before,
+:root[data-theme='light'] .prose-terminal ol > li::marker {
+  color: #c01030;
+}
+:root[data-theme='light'] .prose-terminal blockquote {
+  border-left-color: #c01030;
+  background: rgba(192, 16, 48, 0.045);
+}

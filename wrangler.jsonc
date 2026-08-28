@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zephryx-writeups",
+  "compatibility_date": "2026-08-06",
+
+  // No "main" and no "run_worker_first": this site accepts no input, so there
+  // is no /api/* handler for a Worker script to own and nothing to intercept
+  // before the static build. Requests are served straight from the export,
+  // with out/_headers applied at the edge.
+  //
+  // If a route ever needs a permanent redirect (a renamed slug, a section
+  // moved to a sibling domain), add "main": "worker/index.ts" plus
+  // "run_worker_first": true and follow the REDIRECTS pattern in
+  // zephryx.in's worker/index.ts rather than inventing a second mechanism.
+  "assets": {
+    "directory": "out",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
