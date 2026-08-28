@@ -32,11 +32,15 @@
   // silently undone by the next push. They are stated here so the config and
   // the dashboard agree and stay agreeing.
   //
-  // The site answers on writeups.zephryx.in and nowhere else: a publication
-  // that exists to be indexed should not also be reachable at a workers.dev
-  // hostname serving identical content under a different origin.
+  // workers_dev off: the site answers on writeups.zephryx.in and nowhere
+  // else — a publication that exists to be indexed should not also be
+  // reachable at a workers.dev hostname serving identical content.
+  //
+  // preview_urls on: this is what puts the per-commit and per-branch
+  // preview links on a pull request, which is how a change gets eyeballed
+  // before it reaches the live domain. Worth keeping.
   "workers_dev": false,
-  "preview_urls": false,
+  "preview_urls": true,
 
   // No "binding" here on purpose: an ASSETS binding is what a Worker script
   // uses to reach the static build (`env.ASSETS.fetch`), so declaring one
