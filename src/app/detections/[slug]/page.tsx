@@ -165,12 +165,18 @@ export default async function DetectionPage({ params }: { params: Promise<Params
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/handshake/"
+              {/* Contact lives on the parent site — this domain publishes
+                  research and collects nothing, so the CTA leaves the origin
+                  rather than pointing at a route that does not exist here. */}
+              <a
+                href={`${SITE.parentUrl}/handshake/`}
+                target="_blank"
+                rel="noopener noreferrer external"
                 className="clip-tab border border-red-deep bg-red-core px-5 py-2.5 font-mono text-[13px] text-void transition-all hover:shadow-[0_0_28px_-4px_rgba(255,45,75,0.8)]"
               >
                 Contact
-              </Link>
+                <span className="sr-only"> — on zephryx.in, opens in a new tab</span>
+              </a>
               <Link
                 href="/matrix/"
                 className="border border-line px-5 py-2.5 font-mono text-[13px] text-ink-dim transition-all hover:border-red-deep/70 hover:text-red-blood"
