@@ -12,9 +12,12 @@
   // moved to a sibling domain), add "main": "worker/index.ts" plus
   // "run_worker_first": true and follow the REDIRECTS pattern in
   // zephryx.in's worker/index.ts rather than inventing a second mechanism.
+  // No "binding" here on purpose: an ASSETS binding is what a Worker script
+  // uses to reach the static build (`env.ASSETS.fetch`), so declaring one
+  // without a script is rejected outright — "Cannot use assets with a binding
+  // in an assets-only Worker". Add it back at the same time as "main".
   "assets": {
     "directory": "out",
-    "binding": "ASSETS",
     "not_found_handling": "404-page"
   },
 
