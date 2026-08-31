@@ -43,8 +43,9 @@ export const SITE = {
  * nothing else; duplicating the icon paths here would be copy that drifts.
  */
 export const PROFILES: readonly string[] = [
-  'https://github.com/0xZephryx',
-  'https://x.com/0xZephryx',
+  'https://github.com/iamzephryx',
+  'https://x.com/iamzephryx',
+  'https://www.threads.com/@iam.zephryx',
   'https://www.linkedin.com/in/zephryx/',
   'https://medium.com/@0xZephryx',
   'https://mastodon.social/@zephryx',
