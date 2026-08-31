@@ -103,7 +103,7 @@ export default function SearchExplorer({
           aria-label="Search writeups and detections"
           spellCheck={false}
           autoComplete="off"
-          className="w-full border-0 bg-transparent font-mono text-base text-ink placeholder:text-ink-faint focus:outline-none"
+          className="w-full border-0 bg-transparent font-mono text-base text-ink placeholder:text-ink-faint"
         />
         {searching ? (
           <button
