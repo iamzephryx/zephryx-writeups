@@ -3,14 +3,14 @@ import Reveal from '@/components/Reveal';
 import SearchExplorer from '@/components/SearchExplorer';
 import { getCrossCuttingTerms, getIndexSummary, getSearchIndex } from '@/lib/search';
 import { KIND_LABEL } from '@/lib/searchTypes';
-import { SITE } from '@/lib/site';
+import { buildMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'search',
   description:
     'One search across every writeup and detection rule on the site — the attack and the rule that catches it come back together.',
-  alternates: { canonical: `${SITE.url}/search/` },
-};
+  path: '/search/',
+});
 
 export default function SearchPage() {
   const docs = getSearchIndex();

@@ -4,14 +4,14 @@ import Reveal from '@/components/Reveal';
 import SectionHeading from '@/components/SectionHeading';
 import AttackMatrix from '@/components/AttackMatrix';
 import { getCoverage } from '@/lib/attack';
-import { SITE } from '@/lib/site';
+import { buildMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'techniques',
   description:
     "Which ATT&CK techniques I've actually run and published an attack for, which of those I went back and wrote a detection for, and where I still owe myself the work.",
-  alternates: { canonical: `${SITE.url}/matrix/` },
-};
+  path: '/matrix/',
+});
 
 /**
  * Inline swatch for the four board states named in the hero copy, tinted to match

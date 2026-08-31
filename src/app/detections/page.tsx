@@ -5,14 +5,14 @@ import DetectionsIndex from '@/components/DetectionsIndex';
 import { getAllDetections } from '@/lib/detections';
 import { getCoverage } from '@/lib/attack';
 import { getSearchIndex } from '@/lib/search';
-import { SITE } from '@/lib/site';
+import { buildMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'detections',
   description:
     "Detection rules I wrote after finding my own way past something. Sigma and KQL, with the tuning notes and known blind spots left in, not polished out.",
-  alternates: { canonical: `${SITE.url}/detections/` },
-};
+  path: '/detections/',
+});
 
 export default function DetectionsPage() {
   const detections = getAllDetections();
