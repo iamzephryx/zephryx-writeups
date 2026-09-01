@@ -7,6 +7,7 @@ import { getWriteup } from '@/lib/writeups';
 import { attackUrl, techniqueName } from '@/lib/attack';
 import { SEVERITY_STYLE, STATUS_STYLE } from '@/lib/severity';
 import { SITE } from '@/lib/site';
+import { buildMetadata } from '@/lib/metadata';
 import ContentToc from '@/components/ContentToc';
 import ProseBody from '@/components/ProseBody';
 import RuleActions from '@/components/RuleActions';
@@ -26,18 +27,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const d = getDetection(slug);
   if (!d) return { title: 'Not found' };
-  return {
+  return buildMetadata({
     title: d.title,
     description: d.excerpt,
-    alternates: { canonical: `${SITE.url}/detections/${d.slug}/` },
-    openGraph: {
-      type: 'article',
-      title: d.title,
-      description: d.excerpt,
-      publishedTime: d.date,
-      tags: [...d.techniques, ...d.tags],
-    },
-  };
+    path: `/detections/${d.slug}/`,
+    type: 'article',
+    publishedTime: d.date,
+    tags: [...d.techniques, ...d.tags],
+  });
 }
 
 export default async function DetectionPage({ params }: { params: Promise<Params> }) {

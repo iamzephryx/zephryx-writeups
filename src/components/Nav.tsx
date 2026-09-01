@@ -13,11 +13,13 @@ function NavLink({
   item,
   active,
   className,
+  tabIndex,
   children,
 }: {
   item: { href: string; external: boolean };
   active: boolean;
   className: string;
+  tabIndex?: number;
   children: ReactNode;
 }) {
   if (item.external) {
@@ -28,6 +30,7 @@ function NavLink({
         rel="noopener noreferrer external"
         aria-current={active ? 'page' : undefined}
         className={className}
+        tabIndex={tabIndex}
       >
         {children}
         <span className="sr-only"> — leaves writeups.zephryx.in, opens in a new tab</span>
@@ -35,7 +38,7 @@ function NavLink({
     );
   }
   return (
-    <Link href={item.href} aria-current={active ? 'page' : undefined} className={className}>
+    <Link href={item.href} aria-current={active ? 'page' : undefined} className={className} tabIndex={tabIndex}>
       {children}
     </Link>
   );
@@ -74,6 +77,17 @@ export default function Nav() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // Lock page scroll behind the drawer while it's open so it reads as a
+  // modal, not a dropdown — otherwise the page scrolls underneath it.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   // `/` and ⌘/Ctrl+K open the unified search from anywhere. Guarded on the
   // focused element so the index filter boxes keep receiving the keystroke
   // they were typed into.
@@ -104,10 +118,19 @@ export default function Nav() {
   const desktopNav = NAV.filter((item) => item.href !== '/' && item.href !== SEARCH_HREF);
 
   return (
-    <header
+    <>
+      {/* backdrop — closes the drawer on outside click, blocks the page behind it */}
+      {open ? (
+        <div
+          className="fixed inset-x-0 bottom-0 top-16 z-40 bg-void/60 backdrop-blur-sm lg:hidden"
+          onClick={() => setOpen(false)}
+          aria-hidden
+        />
+      ) : null}
+      <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'border-b border-line/80 bg-void/80 backdrop-blur-xl'
+          ? 'border-b border-line/80 bg-void/95 backdrop-blur-xl'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
@@ -223,7 +246,7 @@ export default function Nav() {
           open ? 'max-h-[32rem] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="flex flex-col px-5 py-3" aria-label="Mobile">
+        <nav className="flex flex-col px-5 py-3" aria-label="Mobile" aria-hidden={!open}>
           {NAV.map((item, i) => {
             const active = !item.external && isActive(item.href);
             const startsExternalCluster = item.external && !NAV[i - 1]?.external;
@@ -239,6 +262,7 @@ export default function Nav() {
                 <NavLink
                   item={item}
                   active={active}
+                  tabIndex={open ? undefined : -1}
                   className={`flex items-center justify-between border-b border-line/50 py-3.5 font-mono text-sm last:border-0 ${
                     active ? 'text-red-blood' : 'text-ink-dim'
                   }`}
@@ -256,6 +280,7 @@ export default function Nav() {
           })}
         </nav>
       </div>
-    </header>
+      </header>
+    </>
   );
 }

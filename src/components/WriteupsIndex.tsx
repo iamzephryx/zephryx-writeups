@@ -78,7 +78,7 @@ export default function WriteupsIndex({
             aria-label="Search writeups"
             spellCheck={false}
             autoComplete="off"
-            className="w-full border border-line bg-abyss/60 py-2 pl-6 pr-3 font-mono text-[13px] text-ink placeholder:text-ink-faint focus:border-red-deep/70 focus:outline-none"
+            className="w-full border border-line bg-abyss/60 py-2 pl-6 pr-3 font-mono text-[13px] text-ink placeholder:text-ink-faint focus:border-red-deep/70"
           />
         </label>
       </div>

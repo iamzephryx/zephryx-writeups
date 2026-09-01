@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { CoverageState, CoverageSummary, TechniqueCoverage } from '@/lib/attack';
 
@@ -55,6 +55,16 @@ type FilterId = (typeof FILTERS)[number]['id'];
 export default function AttackMatrix({ coverage }: { coverage: CoverageSummary }) {
   const [selected, setSelected] = useState<TechniqueCoverage | null>(null);
   const [filter, setFilter] = useState<FilterId>('all');
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  // The board sits well above the fold on most viewports, so a selection
+  // that only updates state leaves the drawer rendering off-screen with no
+  // cue anything happened. Bring it into view and hand it focus instead.
+  useEffect(() => {
+    if (!selected || !drawerRef.current) return;
+    drawerRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    drawerRef.current.focus();
+  }, [selected]);
 
   const columns = useMemo(() => {
     if (filter === 'all') return coverage.columns;
@@ -104,8 +114,12 @@ export default function AttackMatrix({ coverage }: { coverage: CoverageSummary }
         </div>
       </div>
 
-      {/* the board — scrolls horizontally, never the page */}
-      <div className="-mx-5 overflow-x-auto px-5 pb-3 sm:-mx-8 sm:px-8">
+      {/* the board — scrolls horizontally, never the page. The column count
+          means it overflows at every viewport width we support, desktop
+          included, so the fade below isn't gated to a breakpoint either. */}
+      <div className="relative -mx-5 sm:-mx-8">
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-void to-transparent sm:w-14" />
+        <div className="overflow-x-auto px-5 pb-3 sm:px-8">
         <div className="flex min-w-max gap-px bg-line">
           {columns.map((col) => (
             <div key={col.id} className="flex w-[172px] shrink-0 flex-col bg-void">
@@ -149,15 +163,16 @@ export default function AttackMatrix({ coverage }: { coverage: CoverageSummary }
             </div>
           ))}
         </div>
+        </div>
       </div>
 
-      <p className="mt-3 font-mono text-[11px] text-ink-faint lg:hidden">
+      <p className="mt-3 font-mono text-[11px] text-ink-faint">
         <span className="text-red-blood/70">↔ </span>
         scroll the board sideways · tap a technique for detail
       </p>
 
       {/* detail drawer */}
-      <div className="mt-8">
+      <div ref={drawerRef} tabIndex={-1} aria-live="polite" className="mt-8 outline-none">
         {selected ? (
           <div className="panel clip-corner p-6 sm:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">

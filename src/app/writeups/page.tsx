@@ -3,14 +3,14 @@ import Reveal from '@/components/Reveal';
 import WriteupsIndex from '@/components/WriteupsIndex';
 import { getAllWriteups } from '@/lib/writeups';
 import { getSearchIndex } from '@/lib/search';
-import { SITE } from '@/lib/site';
+import { buildMetadata } from '@/lib/metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'writeups',
   description:
     "CTF boxes, real engagements written up with the boring parts still in, and whatever detection work came out of them afterward.",
-  alternates: { canonical: `${SITE.url}/writeups/` },
-};
+  path: '/writeups/',
+});
 
 export default function WriteupsPage() {
   const writeups = getAllWriteups();
