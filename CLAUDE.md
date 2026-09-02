@@ -1,19 +1,3 @@
-> # ⚠️ RETIRED — this repo is not deployed
->
-> The four-site network was consolidated onto **`zephryx.in`**. This site's
-> content now lives there at `/writeups/, /detections/, /matrix/ and /search/`, and `writeups.zephryx.in` serves
-> permanent redirects only.
->
-> **Do not add content or fix bugs here.** Work in the `zephryx.in` repo; its
-> `CLAUDE.md` is the current one. Everything below this line describes the
-> split architecture and is kept for history — several of its rules are now
-> actively wrong, including any instruction to keep content on this domain.
->
-> The redirect configuration and the retirement checklist are in
-> `zephryx.in/docs/redirects.md`.
-
----
-
 # Working notes for this repo
 
 Next.js 15 App Router, static export (`out/`) served by Cloudflare Workers.
