@@ -17,12 +17,16 @@ export const SITE = {
   name: 'Zephryx Writeups',
   short: 'Writeups',
   /**
-   * The human behind the research. Same person as `zephryx.in`'s
-   * `legalName` — stated here too so the Person entity resolves to one
-   * identity across all four domains rather than four unlinked authors.
+   * The author is `parentName` — Zephryx — the same single identity the
+   * sibling sites publish, restated here so the Person entity resolves to one
+   * author across all four domains rather than four unlinked strangers. There
+   * is deliberately no legal-name field anywhere in the network; see
+   * `zephryx.in`'s `site.ts` for why, and don't reintroduce one here.
+   *
+   * `aliases` backs schema.org `alternateName`, so it carries the other
+   * strings for the same person — never the author name itself.
    */
-  legalName: 'Mihir Sarwan',
-  aliases: ['Zephryx', 'Zeph'],
+  aliases: ['Zeph', 'iamzephryx'],
   role: 'Penetration Tester',
   craft: 'Penetration Tester & Security Researcher',
   parentName: 'Zephryx',
