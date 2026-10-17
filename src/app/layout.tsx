@@ -17,8 +17,8 @@ import './globals.css';
 const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: SITE.legalName,
-  alternateName: SITE.aliases,
+  name: SITE.parentName,
+  alternateName: SITE.aliases.filter((a) => a !== SITE.parentName),
   url: SITE.parentUrl,
   jobTitle: SITE.role,
   knowsAbout: [
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   applicationName: SITE.name,
-  authors: [{ name: SITE.legalName, url: SITE.parentUrl }],
-  creator: SITE.legalName,
+  authors: [{ name: SITE.parentName, url: SITE.parentUrl }],
+  creator: SITE.parentName,
   keywords: [
     'security writeups',
     'CTF writeups',

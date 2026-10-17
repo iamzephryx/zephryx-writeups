@@ -83,7 +83,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-line/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-[11px] text-ink-faint">
-            © {year} {SITE.legalName} · {SITE.domain}
+            © {year} {SITE.parentName} · {SITE.domain}
           </p>
           <p className="font-mono text-[11px] text-ink-faint">
             part of{' '}

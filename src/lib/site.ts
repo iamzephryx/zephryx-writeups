@@ -16,12 +16,6 @@ export const SITE = {
    */
   name: 'Zephryx Writeups',
   short: 'Writeups',
-  /**
-   * The human behind the research. Same person as `zephryx.in`'s
-   * `legalName` — stated here too so the Person entity resolves to one
-   * identity across all four domains rather than four unlinked authors.
-   */
-  legalName: 'Mihir Sarwan',
   aliases: ['Zephryx', 'Zeph'],
   role: 'Penetration Tester',
   craft: 'Penetration Tester & Security Researcher',
